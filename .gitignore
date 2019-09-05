@@ -100,5 +100,13 @@ venv.bak/
 # mkdocs documentation
 /site
 
+# PyCharm
+idea/
+
+# Models
+models/
+models/*
+
+
 # mypy
 .mypy_cache/
