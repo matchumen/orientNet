@@ -3,46 +3,9 @@ import sys
 import time
 import torch
 import numpy as np
-
 import torchvision.models.detection.mask_rcnn
-
-from coco_utils import get_coco_api_from_dataset
-from coco_eval import CocoEvaluator
 import utils
-import pprint
 
-
-def fit(model, optimizer, data_loader, device, epochs, lr_scheduler):
-    model.train()
-    for epoch in range(epochs):
-        for images, targets in data_loader:
-            # move sample to device
-            images = list(image.to(device) for image in images)
-            targets = [{k: v.to(device) for k, v in t.items()} for t in targets]
-
-            # forward
-            loss_dict = model(images, targets)
-            losses = sum(loss for loss in loss_dict.values())
-
-            # backward
-            optimizer.zero_grad()
-            losses.backward()
-
-            optimizer.step()
-            lr_scheduler.step()
-
-            out = ""
-            for k, v in loss_dict.items():
-                out += str(k) + " " + str('{:.5f}'.format(v.item())) + " "
-            print(out)
-
-        # print log
-        print("#" * 20)
-        out = ""
-        for k, v in loss_dict.items():
-            out += str(k) + " " + str('{:.5f}'.format(v.item())) + " "
-        print(out)
-        print("#" * 20)
 
 def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq):
     model.train()
